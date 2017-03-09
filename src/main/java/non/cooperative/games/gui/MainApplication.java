@@ -5,6 +5,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.ResourceBundle;
+
 /**
  * Created by U560821 on 2017.03.05..
  */
@@ -16,6 +18,7 @@ public class MainApplication extends javafx.application.Application {
   public void start(Stage stage) throws Exception {
     String fxmlFile = "/fxml/GUI.fxml";
     FXMLLoader loader = new FXMLLoader();
+    loader.setResources(ResourceBundle.getBundle("properties.initialize"));
     Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(fxmlFile));
 
     Scene scene = new Scene(rootNode, 1400, 950);

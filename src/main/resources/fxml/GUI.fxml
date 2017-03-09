@@ -47,13 +47,13 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <ComboBox fx:id="GraphTypeComboBox" accessibleRole="IMAGE_VIEW" layoutX="184.0" layoutY="258.0" prefWidth="150.0" />
+            <ComboBox fx:id="graphTypeComboBox" accessibleRole="IMAGE_VIEW" layoutX="184.0" layoutY="258.0" prefWidth="150.0" />
             <Label layoutX="133.0" layoutY="296.0" text="Rule:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <ComboBox fx:id="RuleComboBox" accessibleRole="IMAGE_VIEW" layoutX="184.0" layoutY="294.0" prefWidth="150.0" />
+            <ComboBox fx:id="ruleComboBox" accessibleRole="IMAGE_VIEW" layoutX="184.0" layoutY="294.0" prefWidth="150.0" onAction="#onRuleSelected" />
             <Label layoutX="119.0" layoutY="346.0" prefHeight="55.0" prefWidth="128.0" text="Payoffs" wrapText="true">
                <font>
                   <Font size="38.0" />
@@ -100,7 +100,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="17.0" layoutY="217.0" text="Contributing Neighbor %:">
+            <Label fx:id="ruleParamLabel" layoutX="17.0" layoutY="217.0" text="Contributing Neighbor %:">
                <font>
                   <Font size="14.0" />
                </font>
