@@ -1,10 +1,13 @@
 package non.cooperative.games.gui;
 
 import com.google.common.collect.Lists;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -40,6 +43,9 @@ public class MainGUIController implements Initializable {
     ruleComboBox.getItems().clear();
     ruleComboBox.setItems(rulesObservableList);
 
+    ruleParamLabel.setMaxWidth(160);
+    ruleParamLabel.setMinWidth(160);
+
     String graphTypes = initializationResources.getString("graphTypes");
     List<String> graphTypesList = Lists.newArrayList(graphTypes.split(","));
     ObservableList graphTypesObservableList = FXCollections.observableList(graphTypesList);
@@ -48,9 +54,12 @@ public class MainGUIController implements Initializable {
   }
 
   public void onRuleSelected(){
+
     String ruleComboBoxValue = ruleComboBox.getValue().toString().replaceAll("\\s+","");
     String ruleParamLabelText = initializationResources.getString(ruleComboBoxValue);
     ruleParamLabel.setText(ruleParamLabelText);
+
+    ruleParamLabel.setAlignment(Pos.CENTER_RIGHT);
   }
 
   public void initializeGameField() {
