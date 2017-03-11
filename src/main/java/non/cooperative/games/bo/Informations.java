@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Informations {
-  private int cooperatorPercent;
   private int nrOfCooperators;
   private int nrOfDefectors;
   private int moneyEarned;

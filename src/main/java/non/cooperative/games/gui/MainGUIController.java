@@ -12,9 +12,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.extern.java.Log;
-import non.cooperative.games.bo.GameField;
-import non.cooperative.games.bo.Parameters;
-import non.cooperative.games.bo.ParametersFactory;
+import non.cooperative.games.bo.*;
 import non.cooperative.games.non.cooperative.games.api.SimulationManager;
 import non.cooperative.games.service.SimulationManagerImpl;
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +36,14 @@ public class MainGUIController implements Initializable {
   @FXML private Label ruleParamLabel;
   @FXML private ComboBox ruleComboBox;
   @FXML private ComboBox graphTypeComboBox;
+
+  @FXML private TextField contributorsPayoffField;
+  @FXML private TextField defectorsPayoffField;
+
+  @FXML private TextField cooperatorPercentageField;
+  @FXML private TextField numberOfCooperatorsField;
+  @FXML private TextField numberOfDefectorsField;
+  @FXML private TextField moneyEarnedField;
 
   SimulationManager simulationManager = new SimulationManagerImpl();
 
@@ -74,11 +80,15 @@ public class MainGUIController implements Initializable {
     Parameters params = getParametersFromGUI();
 
     gameField = simulationManager.initializeGameField(params);
+
+    setPayoffsOnGui();
+    setInformationsOnGui();
   }
 
-  private boolean isEveryFieldFilled(String numberOfPlayers, String investment, String multiplicationFactor, String ruleParam){
+  private boolean isEveryFieldFilled(String numberOfPlayers, String investment, String multiplicationFactor, String ruleParam, String cooperatorPercent){
     return StringUtils.isNotEmpty(numberOfPlayers) && StringUtils.isNotEmpty(investment)
-        && StringUtils.isNotEmpty(multiplicationFactor) && StringUtils.isNotEmpty(ruleParam);
+        && StringUtils.isNotEmpty(multiplicationFactor) && StringUtils.isNotEmpty(ruleParam)
+        && StringUtils.isNotEmpty(cooperatorPercent);
   }
 
   private Parameters getParametersFromGUI(){
@@ -86,23 +96,40 @@ public class MainGUIController implements Initializable {
     String investment = investmentField.getText();
     String multiplicationFactor = multiplicationFactorField.getText();
     String ruleParam = ruleParamField.getText();
+    String cooperatorPercent = initializationResources.getString("startingPercentOfCooperators");
 
     ParametersFactory parametersFactory = new ParametersFactory();
     Parameters gameParameters = null;
 
     boolean isRuleSelected = !ruleComboBox.getSelectionModel().isEmpty();
-    if(isRuleSelected && isEveryFieldFilled(numberOfPlayers, investment, multiplicationFactor, ruleParam)) {
+    if(isRuleSelected && isEveryFieldFilled(numberOfPlayers, investment, multiplicationFactor, ruleParam, cooperatorPercent)) {
       try {
         gameParameters = parametersFactory.getParameters(ruleComboBox.getValue().toString(), Integer.parseInt(ruleParam));
         gameParameters.setNumberOfPlayers(Integer.parseInt(numberOfPlayers));
         gameParameters.setInvestment(Integer.parseInt(investment));
         gameParameters.setMultiplicationFactor(Integer.parseInt(multiplicationFactor));
+        gameParameters.setCooperatorPercent(Integer.parseInt(cooperatorPercent));
       } catch (IllegalArgumentException exception){
         log.severe(exception.getMessage());
       }
     }
 
     return gameParameters;
+  }
+
+  private void setInformationsOnGui(){
+    Informations informations = gameField.getInformations();
+    numberOfCooperatorsField.setText(Integer.toString(informations.getNrOfCooperators()));
+    numberOfDefectorsField.setText(Integer.toString(informations.getNrOfDefectors()));
+    moneyEarnedField.setText(Integer.toString(informations.getMoneyEarned()));
+
+    cooperatorPercentageField.setText(Integer.toString(gameField.getParameters().getCooperatorPercent()));
+  }
+
+  private void setPayoffsOnGui(){
+    Payoffs payoffs = gameField.getPayoffs();
+    contributorsPayoffField.setText(Float.toString(payoffs.getContributorPayoff()));
+    defectorsPayoffField.setText(Float.toString(payoffs.getDefectorPayoff()));
   }
 
 }

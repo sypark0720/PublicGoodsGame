@@ -11,4 +11,5 @@ public abstract class Parameters {
   private int numberOfPlayers;
   private int investment;
   private int multiplicationFactor;
+  private int cooperatorPercent;
 }
