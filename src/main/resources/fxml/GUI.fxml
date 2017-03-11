@@ -18,7 +18,7 @@
          <children>
             <Button fx:id="RestartButton" defaultButton="true" layoutX="103.0" layoutY="862.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="164.0" text="Restart" />
             <Button fx:id="AutomaticStepButton" defaultButton="true" layoutX="102.0" layoutY="818.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="164.0" text="Automatic Step" />
-            <Button fx:id="StartButton" defaultButton="true" layoutX="102.0" layoutY="773.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="164.0" text="Start" onAction="#initializeGameField" />
+            <Button fx:id="StartButton" defaultButton="true" layoutX="102.0" layoutY="773.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="164.0" text="Start" onAction="#onStartPushed" />
             <TextField fx:id="playerNrField" layoutX="184.0" layoutY="105.0" />
             <Label layoutX="110.0" layoutY="25.0" prefHeight="55.0" prefWidth="149.0" text="Settings" wrapText="true">
                <font>

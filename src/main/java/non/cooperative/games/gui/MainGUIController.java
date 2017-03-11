@@ -12,6 +12,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.extern.java.Log;
+import non.cooperative.games.bo.GameField;
+import non.cooperative.games.bo.Parameters;
+import non.cooperative.games.bo.ParametersFactory;
+import non.cooperative.games.non.cooperative.games.api.SimulationManager;
+import non.cooperative.games.service.SimulationManagerImpl;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.URL;
@@ -34,6 +39,10 @@ public class MainGUIController implements Initializable {
   @FXML private ComboBox ruleComboBox;
   @FXML private ComboBox graphTypeComboBox;
 
+  SimulationManager simulationManager = new SimulationManagerImpl();
+
+  GameField gameField;
+
   public void initialize(URL location, ResourceBundle resources) {
     initializationResources = resources;
 
@@ -54,7 +63,6 @@ public class MainGUIController implements Initializable {
   }
 
   public void onRuleSelected(){
-
     String ruleComboBoxValue = ruleComboBox.getValue().toString().replaceAll("\\s+","");
     String ruleParamLabelText = initializationResources.getString(ruleComboBoxValue);
     ruleParamLabel.setText(ruleParamLabelText);
@@ -62,13 +70,39 @@ public class MainGUIController implements Initializable {
     ruleParamLabel.setAlignment(Pos.CENTER_RIGHT);
   }
 
-  public void initializeGameField() {
+  public void onStartPushed() {
+    Parameters params = getParametersFromGUI();
+
+    gameField = simulationManager.initializeGameField(params);
+  }
+
+  private boolean isEveryFieldFilled(String numberOfPlayers, String investment, String multiplicationFactor, String ruleParam){
+    return StringUtils.isNotEmpty(numberOfPlayers) && StringUtils.isNotEmpty(investment)
+        && StringUtils.isNotEmpty(multiplicationFactor) && StringUtils.isNotEmpty(ruleParam);
+  }
+
+  private Parameters getParametersFromGUI(){
     String numberOfPlayers = playerNrField.getText();
     String investment = investmentField.getText();
     String multiplicationFactor = multiplicationFactorField.getText();
+    String ruleParam = ruleParamField.getText();
 
-    if(StringUtils.isNotEmpty(numberOfPlayers) && StringUtils.isNotEmpty(investment) && StringUtils.isNotEmpty(multiplicationFactor)) {
-      log.info("Player#:" + numberOfPlayers + " Investment: " + investment + " MultiplicationFactor: " + multiplicationFactor);
+    ParametersFactory parametersFactory = new ParametersFactory();
+    Parameters gameParameters = null;
+
+    boolean isRuleSelected = !ruleComboBox.getSelectionModel().isEmpty();
+    if(isRuleSelected && isEveryFieldFilled(numberOfPlayers, investment, multiplicationFactor, ruleParam)) {
+      try {
+        gameParameters = parametersFactory.getParameters(ruleComboBox.getValue().toString(), Integer.parseInt(ruleParam));
+        gameParameters.setNumberOfPlayers(Integer.parseInt(numberOfPlayers));
+        gameParameters.setInvestment(Integer.parseInt(investment));
+        gameParameters.setMultiplicationFactor(Integer.parseInt(multiplicationFactor));
+      } catch (IllegalArgumentException exception){
+        log.severe(exception.getMessage());
+      }
     }
+
+    return gameParameters;
   }
+
 }
