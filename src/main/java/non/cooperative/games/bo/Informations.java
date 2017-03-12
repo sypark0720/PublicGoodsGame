@@ -12,4 +12,7 @@ public class Informations {
   private int nrOfCooperators;
   private int nrOfDefectors;
   private int moneyEarned;
+  private int steps;
+  private int nrOfEdgesInGraph;
+  private int[] selflessnessFactors;
 }
